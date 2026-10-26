@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Practice Activity – Pivoting Mid-Task (Bill4Time)</title>
+<style>
+:root{--blue:#2a48a2;--btn:#3777e0;--ylw:#fcc10a;--red:#c0282d;--grn:#1f5c2a;--dis:#d2dde8}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:"Open Sans","Segoe UI",Roboto,Arial,sans-serif;color:#222;background:#e8edf3;padding:14px;user-select:none;-webkit-user-select:none}
+#app{max-width:1020px;margin:0 auto}
+.panel{background:#fff;border:1px solid #c5ccd8;border-radius:3px;overflow:hidden;margin-bottom:10px}
+.ph{background:var(--blue);color:#fff;font-weight:700;font-size:14px;padding:11px 16px;display:flex;justify-content:space-between;align-items:center}
+.pill{background:#6c85d6;border-radius:10px;font-size:10px;padding:2px 10px;font-weight:600}
+.scn{background:#c9d6ee;color:#1d2f66;font-size:12.5px;padding:10px 16px;line-height:1.45}
+#prog{display:flex;align-items:center;gap:10px;margin:8px 2px 10px;font-size:11px;color:#666}
+#prog .tr{flex:1;height:7px;background:#cdd5e4;border-radius:4px;overflow:hidden}
+#prog .fl{height:100%;background:var(--blue);width:0;transition:width .35s}
+.sh{color:#fff;font-weight:700;font-size:12px;padding:9px 16px}
+.sh.b{background:var(--blue)}.sh.r{background:var(--red)}.sh.g{background:var(--grn)}
+.info{display:flex;gap:9px;align-items:center;font-size:12.5px;padding:10px 16px;border-bottom:1px solid #dde2ea;background:#f7f8fa;line-height:1.4}
+.info b.r{color:var(--red)}
+.prompt{margin:12px 14px;background:#e8effb;border:1px solid #b7c8ea;border-radius:4px;padding:11px 14px;font-size:13.5px;line-height:1.45;color:#1d2f66}
+.prompt .q{color:var(--red);font-weight:700;margin-right:6px}
+#stageWrap{margin:0 14px 14px;position:relative}
+#win{width:992px;height:456px;background:#fff;border:1px solid #bbb;transform-origin:0 0;position:absolute;left:0;top:0;overflow:hidden}
+#bar{height:30px;background:var(--blue);color:#fff;font-weight:700;font-size:12px;padding:8px 15px;position:relative}
+#bar .tm{position:absolute;right:12px;top:3px;display:flex;align-items:center;gap:6px;font-size:16px}
+#body{position:absolute;left:0;top:30px;width:100%;height:370px}
+.lbl{position:absolute;font-size:11.5px;white-space:nowrap}
+.fld{position:absolute;height:22px;border:1px solid #a9a9a9;background:#fff;font-size:11px;padding:3px 24px 0 6px;line-height:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fld.sel:after{content:"";position:absolute;right:7px;top:8px;border:4px solid transparent;border-top:5px solid #7d7d7d}
+.fld.tint{background:#e4ebf8;border-color:#b9c8e6}
+.fld.gray{background:#d4d4d4;border-color:#bdbdbd;color:#666}
+.fld.dis{background:var(--dis);border-color:#c3cfdb;color:#667}
+.fld.run{background:#fff0f0;border-color:#e08a8a;color:#c33;font-style:italic}
+.fld.ok{background:#e3f6e8;border-color:#5fb97a;color:#14502a}
+.fld.warm{background:#fff6d8;border-color:#e8c15a}
+.plus{position:absolute;font-size:20px;font-weight:700;color:#4a4a4a;line-height:20px}
+.ta{position:absolute;left:154px;top:150px;width:740px;height:52px;border:1px solid #a9a9a9;background:#e4ebf8;padding:6px;font-size:11.5px;line-height:1.35}
+.cc{position:absolute;left:154px;top:204px;width:740px;text-align:right;font-size:9.5px;font-weight:700;color:#c3c3c3}
+.chk{position:absolute;width:12px;height:12px;border:1px solid #888;background:#fff;border-radius:2px;color:#fff;font-size:9px;line-height:10px;text-align:center}.chk.on{background:#8aa4d6;border-color:#8aa4d6}
+.help{display:inline-block;width:11px;height:11px;border-radius:50%;background:#555;color:#fff;font-size:8px;line-height:11px;text-align:center;font-weight:700;margin-left:3px}
+.get{position:absolute;height:22px;padding:0 12px;border:1px solid #9b9b9b;background:#f1f1f1;font-size:10.5px;cursor:pointer;border-radius:2px;color:#222;font-family:inherit}
+.get:hover{background:#e6e6e6}
+#foot{position:absolute;left:0;bottom:0;width:100%;height:56px;background:#eee;border-top:1px solid #dcdcdc;display:flex;justify-content:flex-end;align-items:center;gap:5px;padding-right:20px}
+.fb{height:31px;padding:0 17px;background:var(--btn);color:#fff;border:0;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit}
+.fb:hover{background:#2a68d0}.fb.c{background:#bcbcbc}
+.hl{outline:3px solid var(--ylw);outline-offset:2px;box-shadow:0 0 0 5px rgba(0,0,0,.28),0 0 14px 4px rgba(252,193,10,.85);animation:pulse 1.2s infinite;position:relative;z-index:5}
+.get.hl{position:absolute}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 5px rgba(0,0,0,.2),0 0 6px 1px rgba(252,193,10,.7)}50%{box-shadow:0 0 0 5px rgba(0,0,0,.2),0 0 18px 6px rgba(252,193,10,.95)}}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+#toast{position:fixed;left:50%;top:14px;transform:translate(-50%,-14px);z-index:50;max-width:88%;padding:9px 16px;border-radius:6px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;box-shadow:0 3px 12px rgba(0,0,0,.3);text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#toast.warn{background:#fff3d1;border:1px solid #f0b429;color:#5a3a00}
+#toast.ok{background:#dff5e6;border:1px solid #3fae67;color:#0d4a24}
+.done .dh{background:var(--grn);color:#fff;font-weight:700;font-size:14px;padding:11px 16px}
+.done .db{padding:16px 18px;font-size:13px}
+.cards{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
+.card{flex:1;min-width:260px;border:1px solid #cfcfcf;border-radius:3px;background:#f8f8f8}
+.card .ch{color:#fff;font-weight:700;font-size:12px;padding:7px 12px}.card .ch.b{background:var(--blue)}.card .ch.r{background:var(--red)}
+.card .cb{padding:10px 12px;font-size:12px;line-height:1.6}.card .ok{color:#1f6b35}
+.df{background:#eee;border-top:1px solid #ddd;padding:10px 18px;text-align:right}
+.so{background:#f1f1f1;border:1px solid #9b9b9b;border-radius:3px;padding:7px 16px;font-size:12px;cursor:pointer;font-family:inherit}
+.so:hover{background:#e3e3e3}
+.seg{display:flex;border:1px solid #9fb2e6;border-radius:4px;overflow:hidden}
+.seg button{background:transparent;color:#dbe4ff;border:0;padding:4px 11px;font-size:11px;cursor:pointer;font-family:inherit}
+.seg button.on{background:#fff;color:var(--blue);font-weight:700}
+.hbtn{background:transparent;border:1px solid #9fb2e6;color:#fff;border-radius:4px;font-size:11px;padding:4px 11px;cursor:pointer;font-family:inherit}
+.hbtn:hover{background:#3a58b4}
+.tools{display:flex;gap:8px;align-items:center}
+.pbtn{border:0;border-radius:5px;padding:10px 18px;font-size:13.5px;font-weight:700;cursor:pointer;background:var(--btn);color:#fff;font-family:inherit}
+.pbtn:hover{background:#2a68d0}.pbtn.s{background:#fff;color:var(--blue);border:2px solid var(--blue)}.pbtn.s:hover{background:#eef2fb}
+#intro .bd{padding:16px 18px;font-size:13.5px;line-height:1.5}
+#intro .bt{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+#intro ol{margin:8px 0 0;padding-left:20px;font-size:13px}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="panel">
+    <div class="ph">Practice Activity — Pivoting Mid-Task <span class="tools"><button class="hbtn" id="hint" style="display:none">Need a hint?</button><button class="hbtn" id="restart">Restart</button><span class="pill">Interactive</span></span></div>
+    <div class="scn"><b>Scenario:</b> You are reviewing medical records for Hernandez, M. when a client — Patel, R. — calls unexpectedly. Work through each step by clicking the correct button in Bill4Time. <span id="modeNote">The button you should click will be highlighted.</span></div>
+  </div>
+  <div id="intro" class="panel"><div class="sh b" style="font-size:14px">Two parts: watch it, then do it</div><div class="bd">
+<p style="margin:0">You are mid-way through a Task A time entry when an urgent client call comes in. You will stamp the end time, save Task A, open a new entry for the call, stamp and save that, then resume Task A. This is a safe simulation – nothing is actually saved.</p>
+<ol><li><b>Part 1 – Guided walkthrough:</b> the correct button is highlighted at every step.</li><li><b>Part 2 – Practice on your own:</b> run the same scenario with nothing highlighted. A hint button is there if you get stuck.</li></ol>
+<div class="bt"><button class="pbtn" id="goG">Start Part 1: Guided walkthrough</button></div></div></div>
+<div id="midPanel" class="panel done" style="display:none"><div class="dh">✓ Walkthrough complete — now it's your turn</div><div class="db"><p style="margin:0 0 6px"><b>Nice work.</b> You stamped the end time, saved Task A, opened a new entry for the call, saved it, and resumed Task A.</p><p style="margin:0">In Part 2 the same scenario starts over, but <b>nothing is highlighted</b>. Use <i>Need a hint?</i> only if you get stuck.</p></div><div class="df"><button class="pbtn" id="goP">Start Part 2: Practice on your own</button> <button class="so" id="redoG">Repeat the walkthrough</button></div></div>
+<div id="prog"><div class="tr"><div class="fl" id="fl"></div></div><span id="pl">Step 1 of 5</span></div>
+
+  <div id="stepPanel" class="panel">
+    <div class="sh b" id="sh"></div>
+    <div class="info" id="info"></div>
+    <div class="prompt" id="prompt"></div>
+    <div id="stageWrap">
+      <div id="win">
+        <div id="bar">New Time Entry<span class="tm"><svg width="20" height="20" viewBox="0 0 22 22"><circle cx="11" cy="11" r="10" fill="none" stroke="#fff" stroke-width="2"/><path d="M8.5 6.5v9l7-4.5z" fill="#fff"/></svg><span id="timer">00:00:00</span><span style="font-size:14px">↺</span></span></div>
+        <div id="body">
+          <div class="lbl" style="left:21px;top:19px">For User:</div><div class="fld sel" style="left:154px;top:16px;width:164px">Johnson, Sarah</div>
+          <div class="lbl" style="left:21px;top:51px">Client:</div><div class="fld sel tint" id="fClient" style="left:154px;top:48px;width:165px"></div><div class="plus" style="left:326px;top:48px">+</div>
+          <div class="lbl" style="left:21px;top:82px">Matter:</div><div class="fld sel tint" id="fMatter" style="left:154px;top:79px;width:165px"></div><div class="plus" style="left:326px;top:79px">+</div>
+          <div class="lbl" style="left:21px;top:110px">Activity:</div><div class="fld sel" id="fAct" style="left:154px;top:107px;width:165px"></div>
+
+          <div class="lbl" style="left:525px;top:15px">Entry Type:</div><div class="fld sel" style="left:657px;top:12px;width:164px">Hourly Work</div>
+          <div class="lbl" style="left:525px;top:46px">Overtime:</div><div class="chk" style="left:657px;top:48px"></div>
+          <div class="lbl" style="left:525px;top:72px">Billable:</div><div class="chk on" style="left:657px;top:74px">✓</div>
+          <div class="lbl" style="left:525px;top:97px">Exclude From Invoice:</div><div class="chk" style="left:657px;top:99px"></div>
+          <div class="lbl" style="left:525px;top:123px">Date Created:</div><div class="lbl" style="left:657px;top:123px;font-weight:600">09/22/2026</div>
+
+          <div class="lbl" style="left:21px;top:153px">Private Description:</div>
+          <div class="ta" id="fDesc"></div><div class="cc" id="cc"></div>
+          <div class="lbl" style="left:154px;top:222px;font-size:10px;font-weight:600"><span class="chk on" style="position:static;display:inline-block;vertical-align:-2px;margin-right:6px">✓</span>Show private description on the invoice?</div>
+
+          <div class="lbl" style="left:21px;top:254px">Date of Work:</div><div class="fld" style="left:154px;top:251px;width:100px">09/22/2026</div>
+          <div class="lbl" style="left:21px;top:284px">Start Time:</div><div class="fld tint" id="fStart" style="left:154px;top:281px;width:120px"></div>
+          <div class="lbl" style="left:21px;top:314px">End Time:</div><div class="fld" id="fEnd" style="left:154px;top:311px;width:120px"></div>
+          <button class="get" id="btnGet" style="left:291px;top:311px">Get Time</button>
+
+          <div class="lbl" style="left:525px;top:254px">Labor Time (hrs):<span class="help">?</span></div><div class="fld dis" id="fLabor" style="left:657px;top:251px;width:120px;height:24px"></div>
+          <div class="lbl" style="left:525px;top:284px">Rate $:</div><div class="fld gray" style="left:657px;top:281px;width:120px;height:24px">0.00</div>
+          <div class="lbl" style="left:525px;top:314px">Travel Time (hrs):<span class="help">?</span></div><div class="fld" style="left:657px;top:311px;width:120px;height:24px"></div>
+          <div class="lbl" style="left:525px;top:344px">Billable (hrs):<span class="help">?</span></div><div class="fld dis" id="fBill" style="left:657px;top:341px;width:120px;height:24px"></div>
+        </div>
+        <div id="foot"><button class="fb" id="bClose">Save &amp; Close</button><button class="fb" id="bNew">Save &amp; New</button><button class="fb" id="bDup">Save &amp; Duplicate</button><button class="fb c" id="bCancel">Cancel</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="donePanel" class="panel done" style="display:none">
+    <div class="dh">✓ Activity Complete — Well Done!</div>
+    <div class="db"><b>You correctly handled the mid-task pivot. Here are the two entries that were logged:</b>
+      <div class="cards">
+        <div class="card"><div class="ch b">Entry 1 — Task A (Medical Record Review)</div><div class="cb"><b>Hernandez, M.</b> — SLS-2026-0441<br>9:00am – 10:22am &nbsp;+&nbsp; 10:45am – 12:30pm<br><span class="ok">✓ Two entries, both accurately timed around the interruption</span></div></div>
+        <div class="card"><div class="ch r">Entry 2 — Task B (Client Communication)</div><div class="cb"><b>Patel, R.</b> — SLS-2026-0389<br>10:22am – 10:45am<br><span class="ok">✓ Inbound call captured with correct start and end time</span></div></div>
+      </div>
+      <p id="errLine" style="margin:12px 0 0;color:#555;font-size:12px"></p>
+    </div>
+    <div class="df"><button class="so" id="again">Practice again</button> <button class="so" id="againG">Start over from the walkthrough</button></div>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s);
+/* ============ EDITABLE CONTENT ============ */
+const A={client:'Hernandez, M.',matter:'SLS-2026-0441',act:'Medical Rec. Review',start:'9:00am',
+ desc:'Reviewed medical records received from treating physician for Matter SLS-2026-0441 (Hernandez, Maria); updated Medical History tab in Litify and drafted medical record summary.'};
+const B={client:'Patel, R.',matter:'SLS-2026-0389',act:'Client Communication',start:'10:22am',
+ desc:'Responded to inbound client call for Matter SLS-2026-0389 (Patel, Rajesh); discussed case status and outstanding documentation required.'};
+/* each step: header colour, header text, info line (html), prompt (html), form state, target button, success message */
+const STEPS=[
+ {c:'b',h:'Step 1 of 5 — Task A: In Progress',i:'You have been reviewing medical records for <b>Hernandez, M.</b> since 9:00 AM. Your Bill4Time entry is open and the timer is running.',
+  p:'<span class="q">?</span><b>Your phone is ringing — Patel, R. is calling.</b> Before you answer, you need to stamp the end time on Task A. Click the correct button below.',
+  d:A,end:null,labor:null,timer:'01:22:14',run:true,target:'get',ok:'Get Time stamped 10:22am as the end time on Task A.'},
+ {c:'r',h:'Step 2 of 5 — Task B: Open New Entry',i:'Get Time has stamped <b>10:22am</b> as the end time on Task A. <b class="r">Patel, R. is on the phone</b> — you need to save Task A and open a new entry for the call in one step.',
+  p:'<span class="q">?</span><b>Task A end time is stamped.</b> You need to save it and immediately open a fresh entry for the urgent task. Click the correct button.',
+  d:A,end:'10:22am',labor:'1.37',timer:'01:22:14',target:'new',ok:'Task A saved. A fresh entry is open for the call.'},
+ {c:'r',h:'Step 3 of 5 — Task B: Stamp End Time',i:'The call with <b class="r">Patel, R.</b> is finished. Your Task B entry is open with a start time of 10:22am. You need to stamp the end time.',
+  p:'<span class="q">?</span><b>The call is over.</b> Stamp the end time on Task B before saving. Click the correct button.',
+  d:B,end:null,labor:null,timer:'00:00:00',run:true,target:'get',ok:'Get Time stamped 10:45am as the end time on Task B.'},
+ {c:'r',h:'Step 4 of 5 — Task B: Save & Close',i:'Task B is fully filled in — client, matter, activity, description, start time <b class="r">10:22am</b>, end time <b class="r">10:45am</b>. Ready to save.',
+  p:'<span class="q">?</span><b>Task B is complete.</b> Save it and return to Task A. Click the correct button.',
+  d:B,end:'10:45am',labor:'0.38',timer:'00:00:00',target:'close',ok:'Task B saved and closed.'},
+ {c:'g',h:'Step 5 of 5 — Task A: Resume',i:'Task B is saved. You are back to your <b>original Task A window</b> (Medical Record Review, Hernandez, M.). You need to resume with a new start time.',
+  p:'<span class="q">?</span><b>You are ready to continue Task A.</b> Open a new entry for the remaining work. Click the correct button to resume.',
+  d:B,end:'10:45am',labor:'0.38',timer:'00:00:00',target:'new',ok:'A new Task A entry is open with a 10:45am start time.'}
+];
+const BTN={get:'#btnGet',new:'#bNew',close:'#bClose'};
+let step=0,errors=0,tT=null,tick=null,mode='guided',hintOn=false;
+function toast(m,t){const e=$('#toast');e.className=t;e.innerHTML=m;void e.offsetWidth;e.classList.add('show');clearTimeout(tT);tT=setTimeout(()=>e.classList.remove('show'),3200)}
+function fit(){const w=$('#stageWrap'),sc=Math.min(1,w.clientWidth/992);$('#win').style.transform='scale('+sc+')';w.style.height=(456*sc)+'px'}
+function render(){
+  const s=STEPS[step],d=s.d;
+  $('#sh').className='sh '+s.c;$('#sh').textContent=s.h;
+  $('#info').innerHTML='<span style="font-size:15px">📋</span><span>'+s.i+'</span>';
+  $('#prompt').innerHTML=s.p;
+  $('#fl').style.width=(step/5*100)+'%';$('#pl').textContent=(mode==='guided'?'Part 1 · Guided':'Part 2 · Practice')+' — Step '+(step+1)+' of 5';
+  $('#fClient').textContent=d.client;$('#fMatter').textContent=d.matter;$('#fAct').textContent=d.act;
+  $('#fDesc').textContent=d.desc;$('#cc').textContent='Character Count: '+d.desc.length;
+  $('#fStart').textContent=d.start;
+  const e=$('#fEnd');
+  if(s.end){e.className='fld warm';e.textContent=s.end}else{e.className='fld run';e.textContent='running...'}
+  const l=$('#fLabor'),b=$('#fBill');
+  if(s.labor){l.className='fld ok';b.className='fld ok';l.textContent=b.textContent=s.labor}else{l.className='fld dis';b.className='fld dis';l.textContent=b.textContent='—'}
+  document.querySelectorAll('.hl').forEach(x=>x.classList.remove('hl'));
+  hintOn=false;applyHl();
+  startTimer(s.timer,!!s.run);
+  fit();
+}
+function applyHl(){document.querySelectorAll('.hl').forEach(x=>x.classList.remove('hl'));if(mode==='guided'||hintOn)$(BTN[STEPS[step].target]).classList.add('hl')}
+function setMode(m){mode=m;hintOn=false;$('#hint').style.display=m==='practice'?'':'none';
+  $('#modeNote').textContent=m==='guided'?'Part 1: the button you should click will be highlighted.':'Part 2: nothing is highlighted – use “Need a hint?” if you get stuck.';applyHl()}
+function startTimer(t,run){
+  clearInterval(tick);const p=t.split(':').map(Number);let sec=p[0]*3600+p[1]*60+p[2];
+  const show=()=>{$('#timer').textContent=[Math.floor(sec/3600),Math.floor(sec/60)%60,sec%60].map(n=>String(n).padStart(2,'0')).join(':')};
+  show();if(run)tick=setInterval(()=>{sec++;show()},1000);
+}
+function press(name){
+  const s=STEPS[step];
+  if(name!==s.target){errors++;toast(mode==='guided'?'Not quite — click the <b>highlighted</b> button for this step.':'Not quite — re-read the prompt and think about which button fits this step.','warn');
+    const w=$('#win');w.classList.remove('shake');void w.offsetWidth;w.classList.add('shake');return}
+  toast(s.ok,'ok');
+  if(step===STEPS.length-1){finish();return}
+  step++;render();
+}
+function finish(){
+  clearInterval(tick);$('#fl').style.width='100%';$('#stepPanel').style.display='none';
+  if(mode==='guided'){$('#prog').style.display='none';$('#midPanel').style.display='block';
+    try{const p=window.parent&&window.parent.GetPlayer&&window.parent.GetPlayer();if(p)p.SetVar('Pivot_GuidedComplete',true)}catch(e){}
+    try{window.parent.postMessage({type:'b4t-pivot-guided-complete'},'*')}catch(e){}
+    return}
+  $('#pl').textContent='Complete!';$('#donePanel').style.display='block';
+  $('#errLine').textContent=errors?('Wrong-button clicks in Part 2: '+errors):'No wrong-button clicks in Part 2 — perfect run.';
+  try{const p=window.parent&&window.parent.GetPlayer&&window.parent.GetPlayer();if(p){p.SetVar('Pivot_Complete',true);p.SetVar('Pivot_Errors',errors)}}catch(e){}
+  try{window.parent.postMessage({type:'b4t-pivot-complete',errors:errors},'*')}catch(e){}
+}
+function restart(m){if(m)setMode(m);$('#intro').style.display='none';$('#midPanel').style.display='none';$('#prog').style.display='';$('#stepPanel').style.display='block';step=0;errors=0;$('#donePanel').style.display='none';$('#stepPanel').style.display='block';render()}
+$('#btnGet').addEventListener('click',()=>press('get'));
+$('#bNew').addEventListener('click',()=>press('new'));
+$('#bClose').addEventListener('click',()=>press('close'));
+$('#bDup').addEventListener('click',()=>press('dup'));
+$('#bCancel').addEventListener('click',()=>press('cancel'));
+$('#again').addEventListener('click',()=>restart('practice'));
+$('#againG').addEventListener('click',()=>restart('guided'));
+$('#redoG').addEventListener('click',()=>restart('guided'));
+$('#goG').addEventListener('click',()=>restart('guided'));$('#goP').addEventListener('click',()=>restart('practice'));
+$('#restart').addEventListener('click',()=>restart('guided'));
+$('#hint').addEventListener('click',()=>{hintOn=true;applyHl()});
+
+window.addEventListener('resize',fit);
+new ResizeObserver(fit).observe($('#stageWrap'));
+window.B4TPivot={restart:restart,state:()=>({step,errors})};
+$('#stepPanel').style.display='none';$('#prog').style.display='none';
+})();
+</script>
+</body>
+</html>
